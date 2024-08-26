@@ -1,0 +1,23 @@
+{
+  "name": "rocket-rush",
+  "version": "1.0.0",
+  "description": "A game with a mission to save a space station from a cataclysmic distress",
+  "main": "build.js",
+  "scripts": {
+    "build": "node build"
+  },
+  "keywords": [
+    "game",
+    "rocket",
+    "mission",
+    "space-game",
+    "space-simulation"
+  ],
+  "author": "Goal Ogunsina",
+  "license": "ISC",
+  "devDependencies": {
+    "@rollup/plugin-terser": "^0.4.4",
+    "roadroller": "^2.1.0",
+    "rollup": "^4.21.0"
+  }
+}
