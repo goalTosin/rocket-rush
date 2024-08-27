@@ -6,10 +6,10 @@ class StoryPage extends Page {
   /**
    *
    * @param {HTMLCanvasElement} canvas
-   * @param {(eventCleanupCallback) => void} pageExitCallback
+   * @param {(page) => void} pageExitCallback
    */
-  constructor(canvas, pageExitCallback) {
-    super(canvas, pageExitCallback);
+  constructor(canvas, exitToPage) {
+    super(canvas, exitToPage);
     this.displayTextTimeStart = null;
     this.displayTextTime = 4000;
     this.displayText = "";
@@ -51,7 +51,7 @@ class StoryPage extends Page {
     }
   }
   exit() {
-    this.pageExitCallback();
+    this.exitToPage('play');
   }
   createEvents() {
     addEventListener("keydown", this.handleKeydown.bind(this));

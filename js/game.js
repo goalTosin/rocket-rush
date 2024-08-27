@@ -28,22 +28,14 @@ class Game {
   }
   setup() {
     this.pages = {
-      start: new StartPage(this.canvas, () => {
-        this.navigateToPage("home");
-      }),
-      home: new HomePage(this.canvas, () => {
-        this.navigateToPage("story");
-      }),
-      play: new PlayPage(this.canvas, () => {
-        this.navigateToPage("home");
-      }),
-      story: new StoryPage(this.canvas, () => {
-        this.navigateToPage("play");
-      }),
+      start: new StartPage(this.canvas, this.navigateToPage.bind(this)),
+      home: new HomePage(this.canvas, this.navigateToPage.bind(this)),
+      play: new PlayPage(this.canvas, this.navigateToPage.bind(this), () => console.log('For now, we haven\'t implemented audio status changing')),
+      story: new StoryPage(this.canvas, this.navigateToPage.bind(this)),
     };
 
     this.page = null;
-    this.navigateToPage("home");
+    this.navigateToPage("start");
   }
   navigateToPage(page) {
     if (Object.keys(this.pages).includes(page)) {
@@ -80,6 +72,7 @@ class Game {
     } catch (error) {
       // console.log([error]);
       this.drawError(error.name, error.message);
+      console.log(error);
     }
     this.showTransitionFX();
     this.lastTimeStamp = timeStamp;
@@ -127,7 +120,7 @@ class Game {
     this.ctx.stroke();
     this.ctx.textBaseline = "top";
     this.ctx.font = headerFont;
-    this.ctx.fillStyle = 'white'
+    this.ctx.fillStyle = "white";
     fillTextWithinWidth(
       header,
       this.ctx,

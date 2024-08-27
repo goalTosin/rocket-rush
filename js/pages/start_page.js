@@ -22,10 +22,10 @@ class StartPage extends Page {
   /**
    *
    * @param {HTMLCanvasElement} canvas
-   * @param {(eventCleanupCallback) => void} pageExitCallback
+   * @param {(page) => void} pageExitCallback
    */
-  constructor(canvas, pageExitCallback) {
-    super(canvas, pageExitCallback);
+  constructor(canvas, exitToPage) {
+    super(canvas, exitToPage);
   }
   handleKeydown(e) {
     if (e.key === "Enter") {
@@ -33,7 +33,7 @@ class StartPage extends Page {
     }
   }
   exit() {
-    this.pageExitCallback();
+    this.exitToPage('home');
   }
   createEvents() {
     addEventListener("keydown", this.handleKeydown.bind(this));

@@ -72,7 +72,7 @@ function measureTextWithinWidth(
   if (wordBreak) {
     writeChunks = [...text];
   }
-  const outOfBounds = (m) => curX + m > x + width;
+  const outOfBounds = (m) => curX + m > width;
   const textHeight = Number(ctx.font.substring(0, ctx.font.indexOf("px")));
   lineHeight = lineHeight ? lineHeight : textHeight;
   lineHeight = textHeight + (lineHeight - textHeight);
@@ -92,7 +92,7 @@ function measureTextWithinWidth(
     curX += tw + (wordBreak ? 0 : ctx.measureText(" ").width);
     mx = curX;
   }
-  return { height: curY - y + textHeight};
+  return { height: curY + textHeight, width: curX};
 }
 
 function drawTextWithinWidth(

@@ -10,10 +10,10 @@ class PlayPage extends Page {
   /**
    *
    * @param {HTMLCanvasElement} canvas
-   * @param {() => void} pageExitCallback
+   * @param {(page) => void} pageExitCallback
    */
-  constructor(canvas, pageExitCallback) {
-    super(canvas, pageExitCallback)
+  constructor(canvas, exitToPage) {
+    super(canvas, exitToPage)
     this.keysDown = {};
     this.camera = {
       x: 0,
@@ -32,7 +32,7 @@ class PlayPage extends Page {
     this.init();
   }
   exit() {
-    this.pageExitCallback()
+    this.exitToPage('home')
   }
   onSizeChange() {}
   init() {

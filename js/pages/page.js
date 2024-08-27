@@ -2,13 +2,13 @@ class Page {
   /**
    *
    * @param {HTMLCanvasElement} canvas
-   * @param {() => void} pageExitCallback
+   * @param {(page) => void} exitToPage
    */
-  constructor(canvas, pageExitCallback) {
+  constructor(canvas, exitToPage) {
     this.canvas = canvas;
     this.ctx = this.canvas.getContext("2d");
     this.scaleTime = 0;
-    this.pageExitCallback = pageExitCallback;
+    this.exitToPage = exitToPage;
   }
   /*
   createEvents() {}
