@@ -1,7 +1,7 @@
 {
   "name": "rocket-rush",
   "version": "1.0.0",
-  "description": "A game with a mission to save a space station from a cataclysmic distress",
+  "description": "A game with a mission: To save a space station from a cataclysmic distress",
   "main": "build.js",
   "scripts": {
     "build": "node build"
@@ -19,7 +19,6 @@
     "@rollup/plugin-terser": "^0.4.4",
     "roadroller": "^2.1.0",
     "rollup": "^4.21.0",
-    "zip-a-folder": "^3.1.7",
     "zip-dir": "^2.0.0"
   }
 }
