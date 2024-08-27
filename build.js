@@ -1,11 +1,9 @@
 const { argv } = require("process");
 
 if (argv.includes("-h") || argv.includes("--help") || argv.includes("-help")) {
-  console.log(`Usage: node build [options]
-
-Basic options:
--h, --help          Display this help message
--r, --rollup-only   Build using only rollup`);
+  console.log(
+    "Usage: node build [options]\n\nBasic options:\n-h, --help          Display this help message\n-r, --rollup-only   Build using only rollup"
+  );
   process.exit();
 }
 
@@ -13,7 +11,7 @@ const { exec } = require("child_process");
 const { readFileSync, writeFileSync, existsSync, mkdirSync } = require("fs");
 const fs = require("fs");
 const path = require("path");
-const zipdir = require('zip-dir');
+const zipdir = require("zip-dir");
 
 // function en(c) {
 //   var x = "charCodeAt",
@@ -33,10 +31,9 @@ const zipdir = require('zip-dir');
 //   return d.join("");
 // }
 
-function compressJs(code) {
+// function compressJs(code) {
   // console.log([...code.matchAll(/\b(var|let|const)\b \b.+?\b=.+?;/g)][0][0]);
   // console.log([...code.matchAll(/function \b.+?\b(.*?)\{[\s\S]+?\}/g)][0][0]);
-
   // code = code.replaceAll(/\b(var|let|const)\b \b.+?\b=.+?;/g,(variableDecl)=>{
   //   if (variableDecl.substring(0,variableDecl.indexOf('=')+1).includes('function')) {
   //     // console.log(variableDecl);
@@ -51,7 +48,7 @@ function compressJs(code) {
   // return `function z(b){var a,e={},d=[...b],c=f=d[0],g=[c],h=o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")};eval(z(${JSON.stringify(
   //   en(code)
   // )}))`;
-}
+// }
 
 function getDirSize(dir) {
   const children = fs.readdirSync(dir, { withFileTypes: true });
@@ -93,18 +90,15 @@ function logBuildSize() {
   console.log(`Compiled to ${Number(buildSize / 1024).toFixed(2)}kb`);
 }
 
-const [input, output] = Array(2).fill("build/bundle.min.js");
-
 exec(
   "npx rollup -c --no-strict --no-treeshake.moduleSideEffects --generatedCode.objectShorthand --generatedCode.symbols"
 ).addListener("exit", () => {
   if (!argv.includes("--rollup-only") && !argv.includes("-r")) {
-    exec("npx roadroller build/bundle.min.js -o build/bundle.min.js").addListener(
-      "exit",
-      () => {
-        logBuildSize();
-      }
-    );
+    exec(
+      "npx roadroller build/bundle.min.js -o build/bundle.min.js"
+    ).addListener("exit", () => {
+      logBuildSize();
+    });
   } else {
     logBuildSize();
   }
@@ -116,13 +110,13 @@ exec(
       .replaceAll("> <", "><")
       .replaceAll(" />", "/>")
       .replace(
-        /<script.* src=".+">\<\/script>/,
+        /<script.*? src=".+?">\<\/script>/,
         '<script src="bundle.min.js"></script>'
       )
-      .replaceAll(/<style>.+<\/style>/g, (match) => {
+      .replaceAll(/<style>.+?<\/style>/g, (match) => {
         let css = compressCss(match.substring(7, match.length - 8));
         return `<style>${css}</style>`;
       })
   );
-  zipdir('./build', { saveTo: './build.zip' })
-  });
+  zipdir("./build", { saveTo: "./build.zip" });
+});
