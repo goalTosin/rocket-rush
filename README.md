@@ -3,7 +3,7 @@ It’s time you got ready for a high-speed, jet-propelled adventure. Prepare you
 
 ## The Challenge
 
-Rocket Rush is a tricky microgame that requires precise handling and quick reactions. It’s a game that punches above its weight at less than 7KB in file size.
+Rocket Rush is a tricky microgame that requires precise handling and quick reactions. It’s a game that punches above its weight at about 8KB in file size.
 
 ## How to Play
 
@@ -25,8 +25,6 @@ Rocket Rush is a tricky microgame that requires precise handling and quick react
 
 - Minimal visuals for authentic arcade experience
 
-- Good code makes it run smoothly (under 8KB!).
-
-## About the Game:
+## About the Game
 
 This microgame was developed individually using modern web technologies; this serves as a demonstration of what the platform can achieve. It’s meant to be simple but fun and challenging whenever you need something to excite you.
