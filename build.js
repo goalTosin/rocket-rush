@@ -13,6 +13,7 @@ const { exec } = require("child_process");
 const { readFileSync, writeFileSync, existsSync, mkdirSync } = require("fs");
 const fs = require("fs");
 const path = require("path");
+const zipdir = require('zip-dir');
 
 // function en(c) {
 //   var x = "charCodeAt",
@@ -123,4 +124,5 @@ exec(
         return `<style>${css}</style>`;
       })
   );
-});
+  zipdir('./build', { saveTo: './build.zip' })
+  });

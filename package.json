@@ -18,6 +18,8 @@
   "devDependencies": {
     "@rollup/plugin-terser": "^0.4.4",
     "roadroller": "^2.1.0",
-    "rollup": "^4.21.0"
+    "rollup": "^4.21.0",
+    "zip-a-folder": "^3.1.7",
+    "zip-dir": "^2.0.0"
   }
 }
