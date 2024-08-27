@@ -43,7 +43,7 @@ class Game {
     };
 
     this.page = null;
-    this.navigateToPage("play");
+    this.navigateToPage("home");
   }
   navigateToPage(page) {
     if (Object.keys(this.pages).includes(page)) {

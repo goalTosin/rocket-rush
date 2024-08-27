@@ -5,7 +5,6 @@ import randomItem from "../utils/randomItem.js";
 import rrand from "../utils/rrand.js";
 import toHexString from "../utils/toHexString.js";
 import Smoke from "./smoke.js";
-import Sprite from "./sprite.js";
 
 class Rocket {
   constructor(x, y) {
@@ -29,29 +28,19 @@ class Rocket {
     // this.fire = new Smoke("rgb(219 40 40 / 63%)", 4, 10);
     this.smoke = new Smoke("#c8c8c8", 10, 1000);
     this.fuelFinishedAware = false;
-    this.maxSpeed = 22.5;
+    this.maxSpeed = 225;
     this.mass = 0.8;
   }
   thrust(dt) {
-    let ovx = this.vx;
-    let ovy = this.vy;
     const angle = this.rotation - Math.PI / 2;
     const dist = this.thrustSpeed * dt;
     this.vx += Math.cos(angle) * dist;
     this.vy += Math.sin(angle) * dist;
     if (this.isTooFast) {
-      // const isDirChange
-      const angle = this.rotation - Math.PI / 2;
-      const dist = this.thrustSpeed * dt;
-      this.vx -= Math.cos(angle) * dist * 10;
-      this.vy -= Math.sin(angle) * dist * 10;
-      // this.vx = ovx;
-      // this.vy = ovy;
-      // this.vx -= Math.cos(this.rotation - Math.PI / 2) * this.thrustSpeed * dt;
-      // this.vy -= Math.sin(this.rotation - Math.PI / 2) * this.thrustSpeed * dt;
+      this.vx *= 0.99
+      this.vy *= 0.99
     }
-    // this.vy -= 30;
-  }
+ }
   get isTooFast() {
     return this.speed > this.maxSpeed;
   }
@@ -70,7 +59,7 @@ class Rocket {
     this.rotation += this.turnSpeed * dt;
   }
   get speed() {
-    return Math.hypot(this.vx, this.vy);
+    return Math.hypot(this.vx, this.vy) * 10;
   }
   /**
    *
