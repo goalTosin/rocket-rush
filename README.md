@@ -5,6 +5,11 @@ It’s time you got ready for a high-speed, jet-propelled adventure. Prepare you
 
 Rocket Rush is a tricky microgame that requires precise handling and quick reactions. It’s a game that punches above its weight at about 8KB in file size.
 
+## Tools Used
+- [Rollup Terser](https://terser.org/)
+
+- [Roadroller](https://rollupjs.org/])
+
 ## How to Play
 
 - Use ArrowUp or W to thrust the rocket.
@@ -24,7 +29,3 @@ Rocket Rush is a tricky microgame that requires precise handling and quick react
 - Simple controls but they’re tough!
 
 - Minimal visuals for authentic arcade experience
-
-## About the Game
-
-This microgame was developed individually using modern web technologies; this serves as a demonstration of what the platform can achieve. It’s meant to be simple but fun and challenging whenever you need something to excite you.
