@@ -197,6 +197,7 @@ class Rocket {
    */
   drawDashboard(ctx) {
     ctx.save();
+    ctx.textAlign = 'start'
     // ctx.translate(-ctx.canvas.width / 2, -ctx.canvas.height / 2)
     let fuelContainerHeight = 60;
     let fuelWidth = (fuelContainerHeight * 1) / 8;

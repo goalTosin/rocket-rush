@@ -88,6 +88,8 @@ class StoryPage extends Page {
    */
   update(dt) {
     secludedDraw(this.ctx, () => {
+      this.ctx.textBaseline = 'top'
+      this.ctx.textAlign = 'start'
       const w = Math.min(1000, (this.canvas.width * 4) / 5);
       const h = Math.min(550, (this.canvas.height * 4) / 5);
       const x = (this.canvas.width - w) / 2;
