@@ -13,7 +13,7 @@ class PlayPage extends Page {
    * @param {(page) => void} pageExitCallback
    */
   constructor(canvas, exitToPage) {
-    super(canvas, exitToPage)
+    super(canvas, exitToPage);
     this.keysDown = {};
     this.camera = {
       x: 0,
@@ -32,7 +32,7 @@ class PlayPage extends Page {
     this.init();
   }
   exit() {
-    this.exitToPage('home')
+    this.exitToPage("home");
   }
   onSizeChange() {}
   init() {
@@ -72,6 +72,7 @@ class PlayPage extends Page {
       this.canvas.width,
       this.canvas.height
     );
+    this.handleKeyupHandler = this.handleKeyup.bind(this);
 
     // for (let i = 0; i < 4; i++) {
     //   const planet = this.planets[i];
@@ -79,12 +80,12 @@ class PlayPage extends Page {
     // }
   }
   createEvents() {
-    addEventListener("keydown", this.handleKeydown.bind(this));
-    addEventListener("keyup", this.handleKeyup.bind(this));
+    addEventListener("keydown", this.handleKeydownHandler);
+    addEventListener("keyup", this.handleKeyupHandler);
   }
   removeEvents() {
-    removeEventListener("keydown", this.handleKeydown.bind(this));
-    removeEventListener("keyup", this.handleKeyup.bind(this));
+    removeEventListener("keydown", this.handleKeydownHandler);
+    removeEventListener("keyup", this.handleKeyupHandler);
   }
   handleKeydown(e) {
     this.handleKeyed(e);
@@ -106,7 +107,7 @@ class PlayPage extends Page {
     // console.log(this.keysDown);
   }
   update(dt) {
-    this.starfield.update(this.ctx,this.camera);
+    this.starfield.update(this.ctx, this.camera);
     if (this.started) {
       this.camera.x = this.rocket.x;
       this.camera.y = this.rocket.y;

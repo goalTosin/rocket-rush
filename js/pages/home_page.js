@@ -14,13 +14,13 @@ class HomePage extends Page {
       {
         name: "New Game",
         callback() {
-          exitToPage('story');
+          exitToPage("story");
         },
       },
       {
         name: "Continue",
         callback() {
-          exitToPage('play');
+          exitToPage("play");
         },
       },
       {
@@ -34,8 +34,7 @@ class HomePage extends Page {
   }
   handleKeydown(e) {
     if (e.key === "Enter") {
-      console.log("hey");
-      this.menu[this.selectedMenuItem].callback()
+      this.menu[this.selectedMenuItem].callback();
     } else if (e.key === "ArrowLeft") {
       if (this.selectedMenuItem > 0) {
         this.selectedMenuItem -= 1;
@@ -54,16 +53,15 @@ class HomePage extends Page {
     this.pageExitCallback();
   }
   createEvents() {
-    addEventListener("keydown", this.handleKeydown.bind(this));
+    addEventListener("keydown", this.handleKeydownHandler);
   }
   removeEvents() {
-    console.log("removed home page events");
-    removeEventListener("keydown", this.handleKeydown.bind(this));
+    removeEventListener("keydown", this.handleKeydownHandler);
   }
   update(dt) {
     drawName(this.ctx);
 
-    const size = Math.min(100, this.canvas.width * 2 / 7);
+    const size = Math.min(100, (this.canvas.width * 2) / 7);
     const rad = size / 4;
     const gap = 2;
     const cw =
@@ -87,18 +85,17 @@ class HomePage extends Page {
     const drawCompText = (i) => {
       this.ctx.textAlign = "center";
       this.ctx.textBaseline = "middle";
-      this.ctx.font = Math.min(15, this.canvas.width * 1 / 20) + 'px "Ubuntu Sans Mono"';
+      this.ctx.font =
+        Math.min(15, this.canvas.width / 20) + 'px "Ubuntu Sans Mono"';
       this.ctx.fillStyle = "white";
 
-      // const h = measureTextWithinWidth(this.menu[i].name, this.ctx, cw).height
       this.ctx.fillText(
         this.menu[i].name,
-        // this.ctx,
         (this.canvas.width - size * this.menu.length) / 2 +
           cw * i +
-          gap * (i + 1) +cw/2,
-        (this.canvas.height + size) / 2 + gap + size / 2 - gap,
-        // cw - 5
+          gap * (i + 1) +
+          cw / 2,
+        (this.canvas.height + size) / 2 + gap + size / 2 - gap
       );
     };
     const drawComps = () => {
@@ -128,8 +125,7 @@ class HomePage extends Page {
 
     this.ctx.beginPath();
     drawAround();
-    // this.ctx.strokeStyle = "white";
-    // this.ctx.lineWidth = 2;
+
     this.ctx.fill();
     this.ctx.restore();
 
@@ -139,14 +135,6 @@ class HomePage extends Page {
     this.ctx.fill();
     drawCompTexts();
   }
-  // this.ctx.moveTo(
-  //   (this.canvas.width - size) / 2 +size  * i,
-  //   (this.canvas.height + size) / 2
-  // );
-  // this.ctx.lineTo(
-  //   (this.canvas.width - size) / 2 +size* i,
-  //   this.canvas.height / 2 + size/2 + size
-  // );
 }
 
 export default HomePage;

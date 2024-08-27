@@ -26,6 +26,7 @@ class StartPage extends Page {
    */
   constructor(canvas, exitToPage) {
     super(canvas, exitToPage);
+    this.scaleTime = 0;
   }
   handleKeydown(e) {
     if (e.key === "Enter") {
@@ -33,13 +34,13 @@ class StartPage extends Page {
     }
   }
   exit() {
-    this.exitToPage('home');
+    this.exitToPage("home");
   }
   createEvents() {
-    addEventListener("keydown", this.handleKeydown.bind(this));
+    addEventListener("keydown", this.handleKeydownHandler);
   }
   removeEvents() {
-    removeEventListener("keydown", this.handleKeydown.bind(this));
+    removeEventListener("keydown", this.handleKeydownHandler);
   }
   update(dt) {
     secludedDraw(this.ctx, () => {

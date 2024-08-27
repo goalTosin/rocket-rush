@@ -29,8 +29,10 @@ class Game {
   setup() {
     this.pages = {
       start: new StartPage(this.canvas, this.navigateToPage.bind(this)),
-      home: new HomePage(this.canvas, this.navigateToPage.bind(this)),
-      play: new PlayPage(this.canvas, this.navigateToPage.bind(this), () => console.log('For now, we haven\'t implemented audio status changing')),
+      home: new HomePage(this.canvas, this.navigateToPage.bind(this), () =>
+        console.log("For now, we haven't implemented audio status changing")
+      ),
+      play: new PlayPage(this.canvas, this.navigateToPage.bind(this)),
       story: new StoryPage(this.canvas, this.navigateToPage.bind(this)),
     };
 
@@ -40,10 +42,12 @@ class Game {
   navigateToPage(page) {
     if (Object.keys(this.pages).includes(page)) {
       if (this.page) {
-        this.page.removeEvents();
+        this.pages[this.page].removeEvents();
+        console.debug(`cleaned up events for the ${this.page} page`);
       }
-      this.page = this.pages[page];
-      this.page.createEvents();
+      this.page = page;
+      this.pages[page].createEvents();
+      console.debug(`created events for the ${page} page`);
     } else {
       const alike = search(Object.keys(this.pages), page);
       console.error(
@@ -68,7 +72,7 @@ class Game {
     this.ctx.clearRect(0, 0, this.canvas.width, this.canvas.height);
     const dt = (timeStamp - this.lastTimeStamp) * this.stepRate;
     try {
-      this.page.update(dt);
+      this.pages[this.page].update(dt);
     } catch (error) {
       // console.log([error]);
       this.drawError(error.name, error.message);
