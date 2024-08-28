@@ -9,7 +9,7 @@ class HomePage extends Page {
    */
   constructor(canvas, exitToPage, changeAudioStatus) {
     super(canvas, exitToPage);
-
+    let audioOn = true;
     this.menu = [
       {
         name: "New Game",
@@ -24,9 +24,18 @@ class HomePage extends Page {
         },
       },
       {
-        name: "Audio: On",
+        name: "Tutorial",
         callback() {
-          changeAudioStatus();
+          exitToPage("story");
+        },
+      },
+      {
+        get name() {
+          return "Audio: " + (audioOn ? "On" : "Off");
+        },
+        callback: () => {
+          audioOn = !audioOn;
+          changeAudioStatus(audioOn);
         },
       },
     ];
@@ -49,9 +58,6 @@ class HomePage extends Page {
       }
     }
   }
-  exit() {
-    this.pageExitCallback();
-  }
   createEvents() {
     addEventListener("keydown", this.handleKeydownHandler);
   }
@@ -61,54 +67,56 @@ class HomePage extends Page {
   update(dt) {
     drawName(this.ctx);
 
-    const size = Math.min(100, (this.canvas.width * 2) / 7);
+    // Serves as height for menu items container. Also serves as width for each menu item (this width includes the gap)
+    const size = Math.min(150, (this.canvas.width * 2) / 8.2);
     const rad = size / 4;
     const gap = 2;
-    const cw =
+    const computedMenuItemWidth =
       (this.menu.length * size - gap * (this.menu.length + 1)) /
       this.menu.length;
     const radius2heightRatio = rad / size;
-    const br = radius2heightRatio * (size - gap * 2);
-    const drawComp = (i) => {
-      const leftRad = i === 0 ? br : 0;
-      const rightRad = i === this.menu.length - 1 ? br : 0;
+    const computedMenuItemRadius = radius2heightRatio * (size - gap * 2);
+
+    const drawMenuItem = (i) => {
+      const leftRad = i === 0 ? computedMenuItemRadius : 0;
+      const rightRad = i === this.menu.length - 1 ? computedMenuItemRadius : 0;
       this.ctx.roundRect(
         (this.canvas.width - size * this.menu.length) / 2 +
-          cw * i +
+          computedMenuItemWidth * i +
           gap * (i + 1), //*(i === this.menu.length - 1 ? 2: 1),
         (this.canvas.height + size) / 2 + gap,
-        cw,
+        computedMenuItemWidth,
         size - gap * 2,
         [leftRad, rightRad, rightRad, leftRad]
       );
     };
-    const drawCompText = (i) => {
+    const drawMenuItemText = (i) => {
       this.ctx.textAlign = "center";
       this.ctx.textBaseline = "middle";
       this.ctx.font =
-        Math.min(15, this.canvas.width / 20) + 'px "Ubuntu Sans Mono"';
+        Math.min(20, this.canvas.width / 24) + 'px "Ubuntu Sans Mono"';
       this.ctx.fillStyle = "white";
 
       this.ctx.fillText(
         this.menu[i].name,
         (this.canvas.width - size * this.menu.length) / 2 +
-          cw * i +
+          computedMenuItemWidth * i +
           gap * (i + 1) +
-          cw / 2,
+          computedMenuItemWidth / 2,
         (this.canvas.height + size) / 2 + gap + size / 2 - gap
       );
     };
-    const drawComps = () => {
+    const drawAllMenuItems = () => {
       for (let i = 0; i < this.menu.length; i++) {
-        drawComp(i);
+        drawMenuItem(i);
       }
     };
-    const drawCompTexts = () => {
+    const drawAllMenuItemTexts = () => {
       for (let i = 0; i < this.menu.length; i++) {
-        drawCompText(i);
+        drawMenuItemText(i);
       }
     };
-    const drawAround = () => {
+    const drawMenuContainer = () => {
       this.ctx.roundRect(
         (this.canvas.width - size * this.menu.length) / 2,
         (this.canvas.height + size) / 2,
@@ -120,20 +128,20 @@ class HomePage extends Page {
     this.ctx.save();
     this.ctx.beginPath();
     this.ctx.rect(0, 0, this.canvas.width, this.canvas.height);
-    drawComps();
+    drawAllMenuItems();
     this.ctx.clip("evenodd");
 
     this.ctx.beginPath();
-    drawAround();
-
+    drawMenuContainer();
     this.ctx.fill();
     this.ctx.restore();
 
     this.ctx.beginPath();
-    drawComp(this.selectedMenuItem);
+    drawMenuItem(this.selectedMenuItem);
     this.ctx.fillStyle = "#ffffff20";
     this.ctx.fill();
-    drawCompTexts();
+
+    drawAllMenuItemTexts();
   }
 }
 
