@@ -1,5 +1,4 @@
 import Sprites from "../sprites.js";
-import easeOut from "../utils/easeout.js";
 import randAngle from "../utils/randAngle.js";
 import randomItem from "../utils/randomItem.js";
 import rrand from "../utils/rrand.js";
@@ -37,10 +36,10 @@ class Rocket {
     this.vx += Math.cos(angle) * dist;
     this.vy += Math.sin(angle) * dist;
     if (this.isTooFast) {
-      this.vx *= 0.99
-      this.vy *= 0.99
+      this.vx *= 0.99;
+      this.vy *= 0.99;
     }
- }
+  }
   get isTooFast() {
     return this.speed > this.maxSpeed;
   }
@@ -48,8 +47,8 @@ class Rocket {
     this.x += this.vx * dt;
     this.y += this.vy * dt;
     if (!this.thrusting) {
-      this.vx *= 0.995;
-      this.vy *= 0.995;
+      this.vx *= 0.999;
+      this.vy *= 0.999;
     }
   }
   turnLeft(dt) {
@@ -196,42 +195,288 @@ class Rocket {
    * @param {CanvasRenderingContext2D} ctx
    */
   drawDashboard(ctx) {
+    const easeOut = (n) => n ** 2;
+    const detailsContainerHeight = 160;
+    const margin = 20;
+
+    // ctx.save();
+    // ctx.fillStyle = "hsl(240, 50%, 10%)";
+    // ctx.fillRect(0, 0, ctx.canvas.width, detailsContainerHeight);
+    ctx.fillStyle = "none";
+
+    const fuelContainerRadius = (detailsContainerHeight - margin * 2) / 2;
+    const fuelAngle = -easeOut(this.fuel) * Math.PI + Math.PI / 2;
+    const fuelContainerX = fuelContainerRadius;
+    const fuelContainerY = fuelContainerRadius + margin;
     ctx.save();
-    ctx.textAlign = 'start'
-    // ctx.translate(-ctx.canvas.width / 2, -ctx.canvas.height / 2)
-    let fuelContainerHeight = 60;
-    let fuelWidth = (fuelContainerHeight * 1) / 8;
-    // easeOut to make fuel look like its about to finish when its not
-    let fuelHeight = easeOut(this.fuel) * this.fuel * fuelContainerHeight;
+    ctx.translate(fuelContainerX, detailsContainerHeight / 2);
+    ctx.scale(1.5, 1.5);
+    ctx.translate(-35, -12);
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1.5;
+    ctx.stroke(
+      new Path2D(
+        "M4 5C4 4.44772 4.44772 4 5 4H12C12.5523 4 13 4.44772 13 5V21H4V5ZM13 11.5H18V19C18 20.1046 18.8954 21 20 21V21C21.1046 21 22 20.1046 22 19V9M17.5 2L20.5 4.66667M20.5 4.66667L22 6V9M20.5 4.66667V9H22M15 21L2 21M10 8L7 8"
+      )
+    );
+    ctx.restore();
+    ctx.beginPath();
+    ctx.arc(
+      fuelContainerX,
+      fuelContainerY,
+      fuelContainerRadius,
+      -Math.PI / 2,
+      Math.PI / 2
+    );
+    ctx.strokeStyle = "white";
+    ctx.lineWidth = 1;
+    ctx.stroke();
 
-    const textPadding = 10;
+    ctx.save();
+    ctx.translate(fuelContainerX, fuelContainerY);
+    ctx.rotate(fuelAngle);
+    const dotRadius = fuelContainerRadius / 10;
+    ctx.beginPath();
+    ctx.arc(0, 0, dotRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
 
-    let textHeight = 100;
+    ctx.beginPath();
+    const pointerHeight = fuelContainerRadius / 2;
+    ctx.moveTo(0, dotRadius / 2);
+    ctx.lineTo(0, -dotRadius / 2);
+    ctx.lineTo(pointerHeight, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    ctx.moveTo(fuelContainerX, fuelContainerY);
+    ctx.lineTo(
+      fuelContainerX + (Math.cos(fuelAngle) * fuelContainerRadius) / 3,
+      fuelContainerY + (Math.sin(fuelAngle) * fuelContainerRadius) / 3
+    );
+    ctx.beginPath();
+    ctx.arc(
+      fuelContainerX,
+      fuelContainerY,
+      fuelContainerRadius,
+      fuelAngle,
+      Math.PI / 2
+    );
+    ctx.lineWidth = 4;
+    const breakage = 255 / 4;
+    const colorLevel =
+      Math.round((easeOut(this.fuel) * 255) / breakage) * breakage;
+    ctx.strokeStyle = `#${toHexString(255 - colorLevel, 2)}${toHexString(
+      colorLevel,
+      2
+    )}00`;
+    ctx.stroke();
+
+    ctx.font = Math.max(15) + 'px "Ubuntu Sans Mono"';
+    ctx.fillStyle = "white";
+    ctx.textBaseline = "middle";
+    ctx.fillText(
+      "F",
+      fuelContainerX + Math.cos(-Math.PI / 2) * fuelContainerRadius - 12.5,
+      fuelContainerY + Math.sin(-Math.PI / 2) * fuelContainerRadius
+    );
+    ctx.fillText(
+      "E",
+      fuelContainerX + Math.cos(Math.PI / 2) * fuelContainerRadius - 12.5,
+      fuelContainerY + Math.sin(Math.PI / 2) * fuelContainerRadius
+    );
+    const fuelContainerRuleSegments = 8;
+    const fuelContainerRuleHeight = fuelContainerRadius / 4;
+    const fuelContainerComputedInnerRadius =
+      fuelContainerRadius - fuelContainerRuleHeight / 2;
+    const fuelContainerComputedOuterRadius =
+      fuelContainerRadius + fuelContainerRuleHeight / 2;
+    for (let i = 0; i <= fuelContainerRuleSegments; i++) {
+      ctx.beginPath();
+      const cos = Math.cos(
+        (Math.PI / fuelContainerRuleSegments) * i - Math.PI / 2
+      );
+      const sin = Math.sin(
+        (Math.PI / fuelContainerRuleSegments) * i - Math.PI / 2
+      );
+      const x = fuelContainerX;
+      const y = fuelContainerY;
+      ctx.moveTo(
+        x + cos * fuelContainerComputedInnerRadius,
+        y + sin * fuelContainerComputedInnerRadius
+      );
+      ctx.lineTo(
+        x + cos * fuelContainerComputedOuterRadius,
+        y + sin * fuelContainerComputedOuterRadius
+      );
+      ctx.lineWidth = i % 2 === 0 ? 3 : 1;
+      ctx.strokeStyle = "white";
+
+      ctx.stroke();
+    }
+
+    const speedContainerRadius = fuelContainerRadius;
+    const speedContainerAngle = Math.PI + Math.PI / 4;
+    const speedContainerAngleStart = -Math.PI / 2 - speedContainerAngle / 2;
+    const speedContainerAngleEnd = -Math.PI / 2 + speedContainerAngle / 2;
+    const speedContainerX = ctx.canvas.width - speedContainerRadius - margin;
+    const speedContainerY = speedContainerRadius + margin;
+    const speedAngle =
+      speedContainerAngleStart +
+      (this.speed / this.maxSpeed) * speedContainerAngle;
+
+    ctx.beginPath();
+    ctx.arc(
+      speedContainerX,
+      speedContainerY,
+      speedContainerRadius,
+      speedContainerAngleStart,
+      speedContainerAngleEnd
+    );
+    ctx.strokeStyle = "white";
+    ctx.stroke();
+
+    ctx.beginPath();
+    ctx.arc(
+      speedContainerX,
+      speedContainerY,
+      speedContainerRadius,
+      speedContainerAngleStart,
+      speedAngle
+    );
+    ctx.strokeStyle = 'blue'
+    ctx.stroke()
+
+    const speedContainerRuleSegments = 8;
+    const speedContainerRuleHeight = fuelContainerRadius / 4;
+    const speedContainerComputedInnerRadius =
+      fuelContainerRadius - speedContainerRuleHeight / 2;
+    const speedContainerComputedOuterRadius =
+      fuelContainerRadius + speedContainerRuleHeight / 2;
+    for (let i = 0; i <= speedContainerRuleSegments; i++) {
+      ctx.beginPath();
+      const cos = Math.cos(
+        speedContainerAngleStart +
+          (speedContainerAngle / speedContainerRuleSegments) * i
+      );
+      const sin = Math.sin(
+        speedContainerAngleStart +
+          (speedContainerAngle / speedContainerRuleSegments) * i
+      );
+      const x = speedContainerX;
+      const y = speedContainerY;
+      ctx.moveTo(
+        x + cos * speedContainerComputedInnerRadius,
+        y + sin * speedContainerComputedInnerRadius
+      );
+      ctx.lineTo(
+        x + cos * speedContainerComputedOuterRadius,
+        y + sin * speedContainerComputedOuterRadius
+      );
+      ctx.lineWidth = i % 2 === 0 ? 3 : 1;
+      ctx.strokeStyle = "white";
+
+      ctx.stroke();
+    }
+
+    ctx.save();
+    ctx.translate(speedContainerX, speedContainerY);
+    ctx.rotate(speedAngle);
+    const speedDotRadius = fuelContainerRadius / 10;
+    ctx.beginPath();
+    ctx.arc(0, 0, speedDotRadius, 0, Math.PI * 2);
+    ctx.fillStyle = "white";
+    ctx.fill();
+
+    ctx.beginPath();
+    const speedPointerHeight = fuelContainerRadius / 2;
+    ctx.moveTo(0, speedDotRadius / 2);
+    ctx.lineTo(0, -speedDotRadius / 2);
+    ctx.lineTo(speedPointerHeight, 0);
+    ctx.closePath();
+    ctx.fill();
+    ctx.restore();
+
+    const textFontSize = Math.max(15);
     const text =
       (this.speed >= 1
         ? Math.round(this.speed)
         : Number(this.speed.toPrecision(1)).toLocaleString()) + "km/h";
-    ctx.font = textHeight + 'px "Ubuntu Sans Mono"';
+    ctx.font = textFontSize + 'px "Ubuntu Sans Mono"';
     ctx.textBaseline = "top";
-    ctx.fillStyle = "blue";
-    ctx.fillText(text, fuelWidth + textPadding, 0);
-    let y = textHeight / 2 - fuelContainerHeight / 2;
-    ctx.fillStyle = "#f0f0f0";
-    ctx.fillRect(0, y, fuelWidth, fuelContainerHeight);
-    let breakage = 255 / 5;
-    let colorLevel =
-      Math.floor((easeOut(this.fuel) * 255) / breakage) * breakage;
-    ctx.fillStyle = `#${toHexString(255 - colorLevel, 2)}${toHexString(
-      colorLevel,
-      2
-    )}00`;
-    // console.log(easeOut(this.fuel), this.fuel);
-    ctx.fillRect(
-      0, // -ow / 2,
-      fuelContainerHeight - fuelHeight + y, // oh - h - oh / 2,
-      fuelWidth,
-      fuelHeight
-    );
+    ctx.textAlign = "center";
+    ctx.fillText(text, speedContainerX, speedContainerY + textFontSize);
+
+    // ctx.textAlign = "start";
+    // ctx.textBaseline = "middle";
+    // ctx.fillStyle = "white";
+    // ctx.font =
+    //   detailsContainerHeight -
+    //   detailsContainerPadding * 2 +
+    //   'px "Ubuntu Sans Mono"';
+    // const ft = "Fuel";
+    // const ftW = ctx.measureText(ft).width;
+    // ctx.fillText(ft, detailsContainerPadding, detailsContainerHeight / 2);
+
+    // const fuelContainerWidth = 60;
+    // const fuelContainerHeight = (fuelContainerWidth * 1) / 4;
+    // const fuelContainerX = detailsContainerPadding * 2 + ftW;
+    // const fuelContainerY = (detailsContainerHeight - fuelContainerHeight) / 2;
+    // const fuelWidth = easeOut(this.fuel) * fuelContainerWidth; // easeOut to make fuel look like its about to finish when its not
+    // ctx.beginPath()
+    // ctx.rect(
+    //   fuelContainerX,
+    //   fuelContainerY,
+    //   fuelContainerWidth,
+    //   fuelContainerHeight
+    // );
+    // ctx.fillStyle = "hsl(0, 0%, 90%)";
+    // ctx.fill()
+    // ctx.strokeStyle = 'black'
+    // ctx.stroke()
+    // const breakage = 255 / 5;
+    // const colorLevel =
+    //   Math.ceil((easeOut(this.fuel) * 255) / breakage) * breakage;
+    // ctx.fillStyle = `#${toHexString(255 - colorLevel, 2)}${toHexString(
+    //   colorLevel,
+    //   2
+    // )}00`;
+    // ctx.fillRect(
+    //   fuelContainerX,
+    //   fuelContainerY,
+    //   fuelWidth,
+    //   fuelContainerHeight
+    // );
+    // let fuelWidth = easeOut(this.fuel) * this.fuel * fuelContainerWidth;
+
+    // const textPadding = 10;
+
+    // let textHeight = 30;
+    // const text =
+    //   (this.speed >= 1
+    //     ? Math.round(this.speed)
+    //     : Number(this.speed.toPrecision(1)).toLocaleString()) + "km/h";
+    // ctx.textBaseline = "top";
+    // ctx.fillStyle = "blue";
+    // ctx.fillText(text, fuelHeight + textPadding, 0);
+    // let y = textHeight / 2 - fuelContainerWidth / 2;
+    // ctx.fillStyle = "#f0f0f0";
+    // ctx.fillRect(0, y, fuelHeight, fuelContainerWidth);
+    // let breakage = 255 / 5;
+    // let colorLevel =
+    //   Math.floor((easeOut(this.fuel) * 255) / breakage) * breakage;
+    // ctx.fillStyle = `#${toHexString(255 - colorLevel, 2)}${toHexString(
+    //   colorLevel,
+    //   2
+    // )}00`;
+    // // console.log(easeOut(this.fuel), this.fuel);
+    // ctx.fillRect(
+    //   0, // -ow / 2,
+    //   fuelContainerWidth - fuelWidth + y, // oh - h - oh / 2,
+    //   fuelHeight,
+    //   fuelWidth
+    // );
 
     ctx.restore();
   }
