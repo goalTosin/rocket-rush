@@ -8,7 +8,7 @@ class Planet {
   constructor(x, y, imageUrl) {
     this.x = x;
     this.y = y;
-    this.sprite = new Sprite(imageUrl);
+    // this.sprite = new Sprite(imageUrl);
     this.radius = Planet.r;
     this.athmosphereRadius = (this.radius * 1) / 5;
     this.name = randomItem(Planet.names);
@@ -82,18 +82,18 @@ class Planet {
   draw(ctx) {
     ctx.save();
     ctx.translate(this.x, this.y);
-    if (this.sprite.loaded) {
-      // let w = this.sprite.width;
-      let ww = this.radius * 2;
-      // let h = this.sprite.height;
-      let wh = this.radius * 2;
-      ctx.drawImage(this.sprite, -ww / 2, -wh / 2, ww, wh);
-    } else {
+    // if (this.sprite.loaded) {
+    //   // let w = this.sprite.width;
+    //   let ww = this.radius * 2;
+    //   // let h = this.sprite.height;
+    //   let wh = this.radius * 2;
+    //   ctx.drawImage(this.sprite, -ww / 2, -wh / 2, ww, wh);
+    // } else {
       ctx.beginPath();
       ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
       ctx.fillStyle = "brown";
       ctx.fill();
-    }
+    // }
     ctx.beginPath();
     ctx.arc(0, 0, this.radius + this.athmosphereRadius, 0, Math.PI * 2);
     ctx.fillStyle = "#0000ff0f";
