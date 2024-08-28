@@ -28,8 +28,8 @@ class StoryPage extends Page {
       "It is losing power fast.",
       "You are a new space pilot.",
       "You have to save the space station.",
-      "Find special rocks to give it power.",
       "It is up to you, the galaxy's last hope.",
+      "Find special rocks to give it power.",
       "You must navigate hazardous asteroid fields.",
       "You must avoid cosmic commotion.",
       "You must outwit nefarious rivals.",
@@ -37,18 +37,19 @@ class StoryPage extends Page {
       "Can you save this space station from this cataclysmic distress?",
       "Can you be a hero?",
     ];
-    this.handleKeydownHandler = this.handleKeydown.bind(this)
+    this.handleKeydownHandler = this.handleKeydown.bind(this);
     // this.currentTextId = this.getLongestTextIndex()
     // this.currentTextId = this.getTextIndexWithLongestWord();
   }
   handleKeydown(e) {
-    if (e.key === "Enter") {
+    if (e.key === "Enter" || e.key === "ArrowRight") {
       if (this.currentTextCharId < this.texts[this.currentTextId].length) {
         this.currentTextCharId = this.texts[this.currentTextId].length;
       } else {
         this.nextText();
       }
-      // this.exit();
+    } else if (e.key === 'ArrowLeft') {
+      this.prevText()
     }
   }
   exit() {
@@ -140,13 +141,24 @@ class StoryPage extends Page {
       }
     });
   }
+
+  resetText() {
+    this.displayTextTimeStart = null;
+    this.currentTextCharId = 0;
+  }
+
   nextText() {
     if (this.currentTextId + 1 < this.texts.length) {
-      this.displayTextTimeStart = null;
       this.currentTextId += 1;
-      this.currentTextCharId = 0;
+      this.resetText();
     } else {
       this.exit();
+    }
+  }
+  prevText() {
+    if (this.currentTextId > 0) {
+      this.currentTextId -= 1;
+      this.resetText();
     }
   }
 }
