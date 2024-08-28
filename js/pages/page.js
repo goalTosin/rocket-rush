@@ -9,7 +9,7 @@ class Page {
     this.ctx = this.canvas.getContext("2d");
     this.exitToPage = exitToPage;
     // to make sure removing event works: https://stackoverflow.com/questions/33859113/javascript-removeeventlistener-not-working-inside-a-class
-    this.handleKeydownHandler = this.handleKeydown.bind(this);
+    // this.handleKeydownHandler = this.handleKeydown.bind(this)
   }
   /*
   createEvents() {}

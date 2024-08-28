@@ -73,7 +73,7 @@ class PlayPage extends Page {
       this.canvas.height
     );
     this.handleKeyupHandler = this.handleKeyup.bind(this);
-
+    this.handleKeydownHandler = this.handleKeydown.bind(this);
     // for (let i = 0; i < 4; i++) {
     //   const planet = this.planets[i];
 

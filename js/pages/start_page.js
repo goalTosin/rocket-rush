@@ -27,6 +27,7 @@ class StartPage extends Page {
   constructor(canvas, exitToPage) {
     super(canvas, exitToPage);
     this.scaleTime = 0;
+    this.handleKeydownHandler = this.handleKeydown.bind(this);
   }
   handleKeydown(e) {
     if (e.key === "Enter") {

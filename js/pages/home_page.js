@@ -40,6 +40,7 @@ class HomePage extends Page {
       },
     ];
     this.selectedMenuItem = 0;
+    this.handleKeydownHandler = this.handleKeydown.bind(this)
   }
   handleKeydown(e) {
     if (e.key === "Enter") {

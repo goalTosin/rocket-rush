@@ -37,6 +37,7 @@ class StoryPage extends Page {
       "Can you save this space station from this cataclysmic distress?",
       "Can you be a hero?",
     ];
+    this.handleKeydownHandler = this.handleKeydown.bind(this)
     // this.currentTextId = this.getLongestTextIndex()
     // this.currentTextId = this.getTextIndexWithLongestWord();
   }
