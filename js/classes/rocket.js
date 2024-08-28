@@ -335,6 +335,7 @@ class Rocket {
       speedContainerAngleEnd
     );
     ctx.strokeStyle = "white";
+    ctx.lineWidth = 1
     ctx.stroke();
 
     ctx.beginPath();
@@ -345,6 +346,7 @@ class Rocket {
       speedContainerAngleStart,
       speedAngle
     );
+    ctx.lineWidth = 4;
     ctx.strokeStyle = 'blue'
     ctx.stroke()
 
