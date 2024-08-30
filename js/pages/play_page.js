@@ -2,8 +2,6 @@ import Planet from "../classes/planet.js";
 import Rocket from "../classes/rocket.js";
 import StarField from "../classes/starfield.js";
 import lerp from "../utils/lerp.js";
-import randomItem from "../utils/randomItem.js";
-import rrand from "../utils/rrand.js";
 import Page from "./page.js";
 
 class PlayPage extends Page {
@@ -15,19 +13,6 @@ class PlayPage extends Page {
   constructor(canvas, exitToPage) {
     super(canvas, exitToPage);
     this.keysDown = {};
-    this.camera = {
-      x: 0,
-      y: 0,
-      rotation: 0,
-      moveBy(x, y) {
-        this.x += x;
-        this.y += y;
-      },
-      moveTo(x, y) {
-        this.x = x;
-        this.y = y;
-      },
-    };
     this.started = true;
     this.init();
   }
@@ -65,13 +50,27 @@ class PlayPage extends Page {
     //  randomItem(
     // this.planets.filter((k) => k !== this.launchOriginPlanet)
     // );
+    this.camera = {
+      x: this.rocket.x,
+      y: this.rocket.y,
+      rotation: 0,
+      moveBy(x, y) {
+        this.x += x;
+        this.y += y;
+      },
+      moveTo(x, y) {
+        this.x = x;
+        this.y = y;
+      },
+    };
 
     this.starfield = new StarField(
-      this.rocket.x,
-      this.rocket.y,
+      this.camera.x,
+      this.camera.y,
       this.canvas.width,
       this.canvas.height
     );
+    
     this.handleKeyupHandler = this.handleKeyup.bind(this);
     this.handleKeydownHandler = this.handleKeydown.bind(this);
     // for (let i = 0; i < 4; i++) {

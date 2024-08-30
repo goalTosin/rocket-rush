@@ -1,66 +1,69 @@
 import randAngle from "../utils/randAngle.js";
+import randomItem from "../utils/randomItem.js";
 import rrand from "../utils/rrand.js";
 import secludedDraw from "../utils/secludedDraw.js";
 
 class StarField {
   constructor(x, y, w, h) {
-    this.stars = Array.from({ length: 1000 }, () => {
+    this.stars = Array.from({ length: 100 }, () => {
       const a = randAngle();
       const r = rrand(Math.hypot(w, h) / 2);
-      let s = new Star(
-        Math.cos(a) * r + w / 2,
-        Math.sin(a) * r + h / 2,
-        1
-      );
-      let multt = Math.random();
-      s.mult = multt;
-      s.x *= 1 / multt;
-      s.y *= 1 / multt;
-      return s;
+      return new Star(Math.cos(a) * r + w / 2 + x, Math.sin(a) * r + h / 2 + y);
     });
   }
+
   update(ctx, camera) {
     this.stars.forEach((star) => {
       secludedDraw(ctx, () => {
-        // ctx.translate(-camera.x,-camera.y)
+        ctx.translate(-camera.x, -camera.y);
         star.draw(ctx);
-        if (star.isOutOfView(camera.x, camera.y, ctx.canvas.width, ctx.canvas.height)) {
-          star.flip(-camera.x, -camera.y)
+        if (
+          star.isOutOfView(
+            camera.x,
+            camera.y,
+            ctx.canvas.width,
+            ctx.canvas.height
+          )
+        ) {
+          const mainGenerationAxis = randomItem(["x", "y"]);
+          const x =
+            mainGenerationAxis === "x"
+              ? ctx.canvas.width * Math.random()
+              : randomItem([0, ctx.canvas.width]);
+          const y =
+            mainGenerationAxis === "y"
+              ? ctx.canvas.height * Math.random()
+              : randomItem([0, ctx.canvas.height]);
+          star.x = camera.x + x;
+          star.y = camera.y + y;
         }
-        })
+      });
     });
   }
-
 }
 
 class Star {
-  constructor(x, y, mult) {
+  constructor(x, y) {
     this.x = x;
     this.y = y;
-    this.mult = mult;
   }
   /**
    *
-   * @param {CanvasRenderingContext2D} ctx
+   * @param { CanvasRenderingContext2D } ctx
    */
   draw(ctx) {
     secludedDraw(ctx, () => {
       ctx.beginPath();
-      ctx.rect(this.x * this.mult, this.y * this.mult, 2, 2);
+      ctx.rect(this.x, this.y, 2, 2);
       ctx.fillStyle = "white";
       ctx.fill();
     });
   }
 
   isOutOfView(x, y, w, h) {
-    let gx = this.x * this.mult;
-    let gy = this.y * this.mult;
-    return gx < x || gy < y || gx > x + w || gy > y + h;
-  }
-
-  flip(x, y) {
-    this.x = x - this.x;
-    this.y = y - this.y;
+    let tx = this.x;
+    let ty = this.y;
+    return tx < x || ty < y || tx > x + w || ty > y + h;
   }
 }
 
