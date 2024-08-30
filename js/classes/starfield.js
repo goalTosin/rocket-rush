@@ -6,9 +6,7 @@ import secludedDraw from "../utils/secludedDraw.js";
 class StarField {
   constructor(x, y, w, h) {
     this.stars = Array.from({ length: 100 }, () => {
-      const a = randAngle();
-      const r = rrand(Math.hypot(w, h) / 2);
-      return new Star(Math.cos(a) * r + w / 2 + x, Math.sin(a) * r + h / 2 + y);
+      return new Star(Math.random() * w + x, Math.random() * h + y);
     });
   }
 
@@ -17,6 +15,7 @@ class StarField {
       secludedDraw(ctx, () => {
         ctx.translate(-camera.x, -camera.y);
         star.draw(ctx);
+        
         if (
           star.isOutOfView(
             camera.x,
