@@ -3,7 +3,6 @@ build
 package-lock.json
 assets/useful
 assets/images/*
-!assets/images/rocket-back.webp
-assets/rocket
+!assets/images/rocket.svg
 .vscode
 *copy.*

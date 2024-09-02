@@ -1,7 +1,7 @@
 import Sprite from "./classes/sprite.js";
 
 const Sprites = {
-  rocket: new Sprite("assets/images/rocket-back.webp"),
+  rocket: new Sprite("assets/images/rocket.svg"),
   hasLoadedAll() {
     for (const spriteName in Sprites) {
       if (Object.hasOwnProperty.call(Sprites, spriteName)) {
