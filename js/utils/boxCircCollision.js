@@ -1,3 +1,5 @@
+import rotatePoint from "./rotatePoint.js";
+
 /**
  *
  * @param {{x: number; y: number; r: number;}} circle
@@ -38,14 +40,6 @@ function boxCircCollision(circle, box) {
       return true;
     }
     return false;
-  }
-
-  function rotatePoint(point, origin, angle) {
-    const originalAngle = Math.atan2(origin.y - point.y, origin.x - point.x);
-    const originalDistance = Math.hypot(origin.y - point.y, origin.x - point.x);
-    const x = origin.x + Math.cos(angle + originalAngle) * originalDistance;
-    const y = origin.y + Math.sin(angle + originalAngle) * originalDistance;
-    return { x, y };
   }
 
   // Rotate the circle around the box's center by the negative rotation angle

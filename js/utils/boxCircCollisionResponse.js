@@ -1,3 +1,5 @@
+import rotatePoint from "./rotatePoint.js";
+
 /**
  *
  * @param {{x: number; y: number; r: number;}} circle
@@ -21,13 +23,6 @@ function boxCircCollisionResponse(circle, box) {
     return { testX, testY };
   }
 
-  function rotatePoint(point, origin, angle) {
-    const originalAngle = Math.atan2(origin.y - point.y, origin.x - point.x);
-    const originalDistance = Math.hypot(origin.y - point.y, origin.x - point.x);
-    const x = origin.x + Math.cos(angle + originalAngle) * originalDistance;
-    const y = origin.y + Math.sin(angle + originalAngle) * originalDistance;
-    return { x, y };
-  }
   const rotatedCirclePos = rotatePoint(circle, box, -box.r);
   const newCirc = { ...circle, ...rotatedCirclePos };
   const { testX, testY } = getURBoxCircContactPoint(newCirc, box);
