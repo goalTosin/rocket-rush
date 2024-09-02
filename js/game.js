@@ -26,6 +26,9 @@ class Game {
     this.setupCanvasSizing();
     this.setup();
   }
+  get currentPage() {
+    return this.pages[this.page]
+  }
   setup() {
     this.pages = {
       start: new StartPage(this.canvas, this.navigateToPage.bind(this)),
@@ -42,11 +45,11 @@ class Game {
   navigateToPage(page) {
     if (Object.keys(this.pages).includes(page)) {
       if (this.page) {
-        this.pages[this.page].removeEvents();
+        this.currentPage.removeEvents();
         console.debug(`cleaned up events for the ${this.page} page`);
       }
       this.page = page;
-      this.pages[page].createEvents();
+      this.currentPage.createEvents();
       console.debug(`created events for the ${page} page`);
     } else {
       const alike = search(Object.keys(this.pages), page);
@@ -74,7 +77,6 @@ class Game {
     try {
       this.pages[this.page].update(dt);
     } catch (error) {
-      // console.log([error]);
       this.drawError(error.name, error.message);
       console.log(error);
     }
@@ -84,7 +86,7 @@ class Game {
   drawError(header, message) {
     const headerFont = Math.max(40, 1) + 'px "Ubuntu Sans Mono"';
     const messageFont = Math.max(10, 1) + 'px "Ubuntu Sans Mono"';
-    const gh = (p) => parseInt(p.substring(0, p.indexOf("p")));
+    // const gh = (p) => parseInt(p.substring(0, p.indexOf("p")));
     const headerWidth = (() => {
       this.ctx.font = headerFont;
       return this.ctx.measureText(header).width;
