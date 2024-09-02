@@ -12,8 +12,8 @@ class Rocket {
     this.vx = 0;
     this.vy = 0;
     this.sprite = Sprites.rocket;
-    let scale = 0.1;
     this.sprite.addEventListener("load", () => {
+      let scale = this.width / this.sprite.width;
       this.width = this.sprite.width * scale;
       this.height = this.sprite.height * scale;
     });
@@ -77,8 +77,8 @@ class Rocket {
       ctx.fill();
       // ctx.restore();
     };
-    let fx = this.x + (Math.cos(this.rotation + Math.PI / 2) * this.height) / 2,
-      fy = this.y + (Math.sin(this.rotation + Math.PI / 2) * this.height) / 2;
+    let fx = this.x + (Math.cos(this.rotation + Math.PI / 2) * this.height *3/5) / 2,
+      fy = this.y + (Math.sin(this.rotation + Math.PI / 2) * this.height*3/5 ) / 2;
     for (let i = 0; i < 10; i++) {
       circ(
         Math.cos(randAngle()) * rrand(6) + fx,
@@ -93,9 +93,9 @@ class Rocket {
   draw(ctx, dt, direction, dist) {
     if (this.thrusting && this.fuel > 0) {
       let fx =
-        this.x + (Math.cos(this.rotation + Math.PI / 2) * this.height) / 2;
+        this.x + (Math.cos(this.rotation + Math.PI / 2) * this.height*4/5) / 2;
       let fy =
-        this.y + (Math.sin(this.rotation + Math.PI / 2) * this.height) / 2;
+        this.y + (Math.sin(this.rotation + Math.PI / 2) * this.height*4/5) / 2;
 
       // this.fire.update(ctx, dt)
       // this.fire.shoot(
@@ -108,14 +108,14 @@ class Rocket {
       this.smoke.shoot(
         fx + Math.cos(this.rotation + Math.PI / 2) * 15,
         fy + Math.sin(this.rotation + Math.PI / 2) * 15,
-        Math.max(30),
+        Math.max(10),
         {
           dx: () => Math.cos(randAngle()) * rrand(1), //(Math.cos(this.rotation - Math.PI / 2) * 20) / 2,
           dy: () => Math.sin(randAngle()) * rrand(1), //(Math.sin(this.rotation - Math.PI / 2) * 20) / 2,
         },
         Math.max(60, this.speed / 2)
       );
-      this.fuel -= 0.0002;
+      this.fuel -= 0.0001;
     }
     if (this.fuel <= 0 && !this.fuelFinishedAware && this.thrusting) {
       alert(
@@ -335,7 +335,7 @@ class Rocket {
       speedContainerAngleEnd
     );
     ctx.strokeStyle = "white";
-    ctx.lineWidth = 1
+    ctx.lineWidth = 1;
     ctx.stroke();
 
     ctx.beginPath();
@@ -347,8 +347,8 @@ class Rocket {
       speedAngle
     );
     ctx.lineWidth = 4;
-    ctx.strokeStyle = 'blue'
-    ctx.stroke()
+    ctx.strokeStyle = "blue";
+    ctx.stroke();
 
     const speedContainerRuleSegments = 8;
     const speedContainerRuleHeight = fuelContainerRadius / 4;
