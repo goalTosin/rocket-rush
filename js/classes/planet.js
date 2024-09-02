@@ -2,7 +2,7 @@ import boxCircCollision from "../utils/boxCircCollision.js";
 import boxCircCollisionResponse from "../utils/boxCircCollisionResponse.js";
 import randomItem from "../utils/randomItem.js";
 import Rocket from "./rocket.js";
-import Sprite from "./sprite.js";
+// import Sprite from "./sprite.js";
 
 class Planet {
   constructor(x, y, imageUrl) {
@@ -10,7 +10,7 @@ class Planet {
     this.y = y;
     // this.sprite = new Sprite(imageUrl);
     this.radius = Planet.r;
-    this.athmosphereRadius = (this.radius * 1) / 5;
+    this.athmosphereRadius = this.radius * 1; // 5;
     this.name = randomItem(Planet.names);
     this.friction = 0.01;
     this.gravity = 0.2;
@@ -60,8 +60,10 @@ class Planet {
           r: rocket.rotation,
         }
       );
-      rocket.x = fp.x;
-      rocket.y = fp.y;
+      // rocket.vx += (fp.x-rocket.x)*0.1;
+      // rocket.vy += (fp.y-rocket.y)*0.1;
+      rocket.x = fp.x - rocket.vx;
+      rocket.y = fp.y - rocket.vy;
 
       const angle = Math.atan2(rocket.y - this.y, rocket.x - this.x);
       rocket.rotation = angle + Math.PI / 2;
@@ -80,8 +82,6 @@ class Planet {
    * @param {CanvasRenderingContext2D} ctx
    */
   draw(ctx) {
-    ctx.save();
-    ctx.translate(this.x, this.y);
     // if (this.sprite.loaded) {
     //   // let w = this.sprite.width;
     //   let ww = this.radius * 2;
@@ -89,17 +89,23 @@ class Planet {
     //   let wh = this.radius * 2;
     //   ctx.drawImage(this.sprite, -ww / 2, -wh / 2, ww, wh);
     // } else {
-      ctx.beginPath();
-      ctx.arc(0, 0, this.radius, 0, Math.PI * 2);
-      ctx.fillStyle = "brown";
-      ctx.fill();
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.radius, 0, Math.PI * 2);
+    ctx.fillStyle = "brown";
+    ctx.fill();
     // }
     ctx.beginPath();
-    ctx.arc(0, 0, this.radius + this.athmosphereRadius, 0, Math.PI * 2);
+    ctx.arc(
+      this.x,
+      this.y,
+      this.radius + this.athmosphereRadius,
+      0,
+      Math.PI * 2
+    );
     ctx.fillStyle = "#0000ff0f";
     ctx.fill();
-    ctx.restore();
   }
+
   attachRocket(rocket, zeroVel) {
     const angle = Math.atan2(rocket.y - this.y, rocket.x - this.x);
     rocket.rotation = angle + Math.PI / 2;
@@ -114,7 +120,7 @@ class Planet {
     if (zeroVel) {
       rocket.vx = 0;
       rocket.vy = 0;
-      rocket.thrusting = false;
+      // rocket.thrusting = false;
     }
   }
   /**
