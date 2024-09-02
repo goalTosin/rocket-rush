@@ -32,23 +32,27 @@ const zipdir = require("zip-dir");
 // }
 
 // function compressJs(code) {
-  // console.log([...code.matchAll(/\b(var|let|const)\b \b.+?\b=.+?;/g)][0][0]);
-  // console.log([...code.matchAll(/function \b.+?\b(.*?)\{[\s\S]+?\}/g)][0][0]);
-  // code = code.replaceAll(/\b(var|let|const)\b \b.+?\b=.+?;/g,(variableDecl)=>{
-  //   if (variableDecl.substring(0,variableDecl.indexOf('=')+1).includes('function')) {
-  //     // console.log(variableDecl);
-  //     return variableDecl
-  //   }
-  //   console.log(variableDecl);
-  //   return variableDecl.substring(variableDecl.match(/\s/).index)
-  // })
-  // console.log(
-  //   [...code.matchAll(/this.hey/g)].map((k) => k.toString().substring(0, k.length - 1))
-  // );                |
-  // return `function z(b){var a,e={},d=[...b],c=f=d[0],g=[c],h=o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")};eval(z(${JSON.stringify(
-  //   en(code)
-  // )}))`;
+// console.log([...code.matchAll(/\b(var|let|const)\b \b.+?\b=.+?;/g)][0][0]);
+// console.log([...code.matchAll(/function \b.+?\b(.*?)\{[\s\S]+?\}/g)][0][0]);
+// code = code.replaceAll(/\b(var|let|const)\b \b.+?\b=.+?;/g,(variableDecl)=>{
+//   if (variableDecl.substring(0,variableDecl.indexOf('=')+1).includes('function')) {
+//     // console.log(variableDecl);
+//     return variableDecl
+//   }
+//   console.log(variableDecl);
+//   return variableDecl.substring(variableDecl.match(/\s/).index)
+// })
+// console.log(
+//   [...code.matchAll(/this.hey/g)].map((k) => k.toString().substring(0, k.length - 1))
+// );                |
+// return `function z(b){var a,e={},d=[...b],c=f=d[0],g=[c],h=o=256;for(b=1;b<d.length;b++)a=d[b].charCodeAt(0),a=h>a?d[b]:e[a]?e[a]:f+c,g.push(a),c=a.charAt(0),e[o]=f+c,o++,f=a;return g.join("")};eval(z(${JSON.stringify(
+//   en(code)
+// )}))`;
 // }
+
+function getFileSize(filePath) {
+  return fs.readFileSync(filePath).byteLength;
+}
 
 function getDirSize(dir) {
   const children = fs.readdirSync(dir, { withFileTypes: true });
@@ -87,7 +91,13 @@ if (!existsSync("build")) {
 
 function logBuildSize() {
   const buildSize = getDirSize("./build");
-  console.log(`Compiled to ${Number(buildSize / 1024).toFixed(2)}kb`);
+  console.log(
+    `Compiled to ${Number(buildSize / 1024).toFixed(
+      2
+    )}kb. Zipped file size is ${Number(
+      getFileSize("./build.zip") / 1024
+    ).toFixed(2)}kb`
+  );
 }
 
 exec(
