@@ -6,3 +6,4 @@ assets/images/*
 !assets/images/rocket-back.webp
 assets/rocket
 .vscode
+*copy.*
